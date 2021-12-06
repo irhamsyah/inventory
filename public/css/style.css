@@ -1,0 +1,25 @@
+.frm1 {
+    margin-top: 20px;
+    /* margin-left: 300px; */
+    width: 500px;
+    background-color: aqua;
+    color: red;
+}
+.bor {
+    border: 1px solid;
+}
+.mr1 {
+    width: 245px;
+}
+@media only screen and (min-width: 600px) {
+    /* For tablets: */
+    .rm1 {
+        width: 50%;
+    }
+}
+@media only screen and (min-width: 768px) {
+    /* For desktop: */
+    .rm1 {
+        width: 50%;
+    }
+}
