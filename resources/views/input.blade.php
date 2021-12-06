@@ -42,11 +42,13 @@
           </div>
         </div>
       </div> --}}
-      <div class="d-grid gap-2 d-md-block">
-        <button class="btn btn-primary" type="submit">SIMPAN</button>
-        <button class="btn btn-primary" type="submit">BATAL</button>
+      <div class="grid">
+        <div class="g-col-6 g-col-md-4">
+          <button class="btn btn-primary" type="submit">SIMPAN</button>
+          <button class="btn btn-primary" type="submit">BATAL</button>
+
+        </div>
       </div>
-      
       {{-- <div class="input-group mb-3">
         <span class="input-group-text">$</span>
         <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
