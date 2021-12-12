@@ -16,3 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('input');
 });
+
+Route::post('simpandatakomputer',
+    [
+        'as'=>'simpaninputkomputer',
+        'uses'=>'InventoryController@store'
+    ]
+);

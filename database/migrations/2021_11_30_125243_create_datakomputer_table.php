@@ -14,9 +14,9 @@ class CreateDatakomputerTable extends Migration
     public function up()
     {
         Schema::create('datakomputer', function (Blueprint $table) {
-            $table->string('snid',50);
-            $table->string('model',70);
-            $table->string('type',70);
+            $table->string('snidpc',50);
+            $table->string('modelpc',70);
+            $table->string('typepc',70);
             $table->timestamps();
         });
     }

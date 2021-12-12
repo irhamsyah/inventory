@@ -8,7 +8,8 @@ class Datakomputer extends Model
 {
     //
     protected $table="datakomputer";
-    protected $primaryKey ="snid";
+    protected $primaryKey ="snidpc";
     public $timestamps = true;
+    protected $fillable = ['snidpc', 'modelpc','typepc'];
 
 }
