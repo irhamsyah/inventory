@@ -6,6 +6,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Datakomputer;
+use App\Models\Dataprinter;
+use App\Models\Datahpaompantas;
 
 class InventoryController extends Controller
 {
@@ -13,9 +15,9 @@ class InventoryController extends Controller
      * Display a listing of the resource.
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function createkomputer()
     {
-        //
+        return view('input');
     }
 
     /**
@@ -23,9 +25,15 @@ class InventoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function createprinter()
     {
         //
+        return view('inputprinter');
+    }
+
+    public function createhpaompantas()
+    {
+        return view('inputhpaompantas');
     }
 
     /**
@@ -56,19 +64,61 @@ class InventoryController extends Controller
             //To show flash message on input form ypu must specify variable to load message on form/blade/template such as 'message'   
             session()->flash('message', 'Computer data which S/N : ' . $request->snidpc .' Saved');
             session()->flash('type', 'success');
-            return redirect('/');
+            return redirect('/inputdatakomputer');
 
     }
+    public function storeprinter(Request $request)
+    {
+        // dd($request);
+        //below, this method to validate your input form
+        $this->validate($request, [ 
+            'snid' => 'required|unique:dataprinter',
+            'model' => 'required',
+            'type'=>'required',
+        ]);
+        
+        if (!empty($request->snid)){
+            $data = $request->only('snid','model','type');
+        }
 
+        // Don't overcomplicate, just upload to public/img folder and log the file name
+        // In the future, maybe we would do some processing like resize or crop it.
+
+        $datakomputer = Dataprinter::create($data);
+
+            //To show flash message on input form ypu must specify variable to load message on form/blade/template such as 'message'   
+            session()->flash('message', 'Printer data which S/N : ' . $request->snid .' Saved');
+            session()->flash('type', 'success');
+            return redirect('/forminputhpaompantas');
+    }
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function storehpaompantas(Request $request)
     {
-        //
+        // dd($request);
+        //below, this method to validate your input form, if input box is empty, form show error message
+        $this->validate($request, [ 
+            'imei' => 'required|unique:datahpaompantas',
+            'snid' => 'required|unique:datahpaompantas',
+            'merk'=>'required',
+            'model',
+        ]);
+        
+        //this condtion check variable from input Form HP AOM PANTAS
+        if (!empty($request->snid)){
+            $data = $request->only('imei','snid','merk','model');
+        }
+
+        $datakomputer = Datahpaompantas::create($data);
+
+            //To show flash message on input form ypu must specify variable to load message on form/blade/template such as 'message'   
+            session()->flash('message', 'HP AOM PANTAS which S/N : ' . $request->imei .' Saved');
+            session()->flash('type', 'success');
+            return redirect('/forminputhpaompantas');
     }
 
     /**

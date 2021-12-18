@@ -11,5 +11,5 @@ class Datakomputer extends Model
     protected $primaryKey ="snidpc";
     public $timestamps = true;
     protected $fillable = ['snidpc', 'modelpc','typepc'];
-
+    
 }
