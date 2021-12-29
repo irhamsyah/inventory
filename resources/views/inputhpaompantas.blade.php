@@ -1,4 +1,6 @@
-@extends('layout.layout') @section('content') @include('layout.flashmessage')
+@extends('layout.layout')
+@section('content') 
+@include('layout.flashmessage')
 
 {{-- Variable 'message' on flash from InventoryController@store ' --}}
 
@@ -20,8 +22,9 @@
         placeholder="IMEI1 HP"
         aria-label="Username"
         aria-describedby="basic-addon1"
+        value="{{old('imei')}}"
     />
-</di>
+</div>
 <div class="input-group mb-3 mt-3 w-50">
     <span class="input-group-text" id="basic-addon1">Serial Number</span>
     <input
@@ -31,30 +34,48 @@
         placeholder="Serial Number HP"
         aria-label="SN"
         aria-describedby="basic-addon1"
+        value="{{old('snid')}}"
     />
 </div>
 
 <label for="colFormLabel" class="col-sm-2 col-form-label">Merk</label>
+<?php
+$merks=array("SAMSUNG","OPPO","REALME");
+?>
 <select
     class="form-select form-select-md mb-3 w-50"
     name="merk"
     aria-label=".form-select-lg example"
 >
-    <option selected>select Merk</option>
-    <option value="SAMSUNG">SAMSUNG</option>
-    <option value="OPPO">OPPO</option>
-    <option value="REALME">REALME</option>
+<option value="">-- Select Merk --</option>
+    {{-- THIS IS METHOD TO GET OLD VALUE ON SELECT ELEMEMT --}}
+    @foreach($merks as $key => $value)
+        @if(old('merk')==$value)
+            <option value="{{ $value }}" selected>{{ $value }}</option>
+        @else
+            <option value="{{ $value }}">{{ $value }}</option>
+        @endif
+    @endforeach
 </select>
-<label for="colFormLabel" class="col-sm-2 col-form-label">MODEL HP</label>
 
+<label for="colFormLabel" class="col-sm-2 col-form-label">MODEL HP</label>
+<?php
+$models=array("SM-A115F/DS","SM-A127F/DS");
+?>
 <select
     class="form-select form-select-md w-50"
     name="model"
     aria-label=".form-select-sm example"
 >
-    <option selected>select Model</option>
-    <option value="SM-A115F/DS">SM-A115F/DS</option>
-    <option value="SM-A127F/DS">SM-A127F/DS</option>
+    <option selected>-- Select Model --</option>
+    {{-- THIS IS METHOD TO GET OLD VALUE ON SELECT ELEMEMT --}}
+    @foreach($models as $key => $value)
+        @if(old('model')==$value)
+            <option value="{{ $value }}" selected>{{ $value }}</option>
+        @else
+            <option value="{{ $value }}">{{ $value }}</option>
+        @endif
+    @endforeach
 </select>
 
 <div class="grid">

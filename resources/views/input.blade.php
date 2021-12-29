@@ -12,17 +12,17 @@
       <h2><label for="basic-url" class="form-label mt-3">Input Data Komputer</label></h2>
       <div class="input-group mb-3 mt-3 w-50">
         <span class="input-group-text" id="basic-addon1">Serial Number</span>
-        <input type="text" name="snidpc" class="form-control" placeholder="Serial Number PC" aria-label="Username" aria-describedby="basic-addon1">
+        <input type="text" name="snidpc" class="form-control" placeholder="Serial Number PC" aria-label="Username" aria-describedby="basic-addon1" value="{{old('snidpc')}}">
       </div>
       
       <div class="input-group mb-3 w-50">
         <span class="input-group-text" id="basic-addon1">Model</span>
-        <input type="text" name="modelpc" class="form-control" placeholder="Model PC" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <input type="text" name="modelpc" class="form-control" placeholder="Model PC" aria-label="Recipient's username" aria-describedby="basic-addon2" value="{{old('modelpc')}}">
       </div>
 
       <div class="input-group mb-3 w-50">
         <span class="input-group-text" id="basic-addon3">Type</span>
-        <input type="text" name="typepc" class="form-control" id="basic-url" placeholder="Type PC" aria-describedby="basic-addon3">
+        <input type="text" name="typepc" class="form-control" id="basic-url" placeholder="Type PC" aria-describedby="basic-addon3" value="{{old('typepc')}}">
       </div>
       <div class="grid">
         <div class="g-col-6 g-col-md-4">

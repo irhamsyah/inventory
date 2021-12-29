@@ -12,7 +12,7 @@
             integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
             crossorigin="anonymous"
         />
-        {{-- CSS STYLE --}}
+        <!-- {{-- CSS STYLE --}} -->
         <link rel="stylesheet" href="css\style.css" />
 
         <title>Menu Aplikasi Administrasi Inventaris</title>
@@ -48,6 +48,7 @@
                                     >Home</a
                                 >
                             </li>
+                            {{-- Menu Aplikasi  --}}
                             <li class="nav-item dropdown">
                                 <a
                                     class="nav-link dropdown-toggle"
@@ -94,6 +95,53 @@
                                     </li>
                                 </ul>
                             </li>
+                            {{-- Menu View melihat data --}}
+                            <li class="nav-item dropdown">
+                                <a
+                                    class="nav-link dropdown-toggle"
+                                    href="#"
+                                    id="navbarDropdown"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    Menu View Data Inputan
+                                </a>
+                                <ul
+                                    class="dropdown-menu"
+                                    aria-labelledby="navbarDropdown"
+                                >
+                                    <li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{
+                                                route('viewdatakomputer')
+                                            }}"
+                                            >View Data Komputer</a
+                                        >
+                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{
+                                                route('forminputprinter')
+                                            }}"
+                                            >View Data Printer</a
+                                        >
+                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{
+                                                route('forminputhpaompantas')
+                                            }}"
+                                            >Viwe Data HP AOM</a
+                                        >
+                                    </li>
+                                </ul>
+                            </li>                        
                         </ul>
                     </div>
                 </div>

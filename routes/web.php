@@ -72,3 +72,25 @@ Route::get('simpaninputhpaom',
         'uses'=>'InventoryController@createhpaompantas'
     ]
 );
+
+//Rooting to show data table computer
+Route::get('viewdatakomputer',
+[
+    'as'=>'viewdatakomputer',
+    'uses'=>'InventoryController@viewcomputerrecord'
+]
+);
+//Rooting to show PC's Data for Updating 
+Route::get('editdatapc/{id}',
+[
+    'as'=>'editdatapc',
+    'uses'=>'InventoryController@editdatapc'
+]
+);
+//Routing to Save Update Computer Database
+Route::post('updatedatakomputer',
+[
+    'as'=>'updatedatakomputer',
+    'uses'=>'InventoryController@updatedatakomputer'
+]
+);
