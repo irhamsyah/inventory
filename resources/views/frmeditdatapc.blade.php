@@ -11,7 +11,7 @@
       <h2><label for="basic-url" class="form-label mt-3">Update Data Komputer</label></h2>
       <div class="input-group mb-3 mt-3 w-50">
         <span class="input-group-text" id="basic-addon1">Serial Number</span>
-        {{ Form::text('snidpc',$hasil->snidpc,['required','id'=>'1','class'=>'form-control','placeholder'=>'Serial Number PC']) }}
+        {{ Form::text('snid',$hasil->snid,['required','id'=>'1','class'=>'form-control','placeholder'=>'Serial Number PC']) }}
       </div>
       
       <div class="input-group mb-3 w-50">

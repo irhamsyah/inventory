@@ -174,6 +174,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        // /* Untuk SNAPY WKHTMLTOPDF*/
+        // Barryvdh\Snappy\ServiceProvider::class,
+        /*** DOM PDF ***/
+        Barryvdh\DomPDF\ServiceProvider::class,
 
     ],
 
@@ -226,6 +230,11 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        //CONFIGURATION FOR DOMPDF
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+        // Facade for shorter code SNAPY PDF
+        // 'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        // 'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
 
     ],
 

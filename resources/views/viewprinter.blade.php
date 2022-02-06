@@ -9,38 +9,38 @@
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h2>Data Komputer dan Laptop</h2></div>
+                    <div class="col-sm-8"><h2>Data Printer Backup Surabaya </h2></div>
                 </div>
             </div>
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Serial Number PC/Laptop</th>
-                        <th>Model PC/Laptop</th>
-                        <th>Merk/Type PC/Laptop</th>
+                        <th>Serial Number Printer</th>
+                        <th>Model Printer</th>
+                        <th>Type Printer</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($datakomputers as $datakomputer)
+                    @foreach($dataprinters as $value)
                     <tr>
-                        <td>{{$datakomputer->snid}}</td>
-                        <td>{{$datakomputer->modelpc}}</td>
-                        <td>{{$datakomputer->typepc}}</td>
+                        <td>{{$value->snid}}</td>
+                        <td>{{$value->model}}</td>
+                        <td>{{$value->merk}}</td>
                         <td>
-                            {{-- <a class="edit" title="Edit" data-toggle="tooltip" href="{{url('editdatapc/'.$datakomputer->snid)}}"> <i class="material-icons">&#xE254;</i></a>
-                            <a class="delete" title="Delete" data-toggle="tooltip" href="{{route('datapc.destroy', ['id' => $datakomputer->snid])}}" onclick="return confirm('Apakah PC akan dihapus')">
+                            {{-- <a class="edit" title="Edit" data-toggle="tooltip" href="{{url('editdatapc/'.$datakomputer->snidpc)}}"> <i class="material-icons">&#xE254;</i></a>
+                            <a class="delete" title="Delete" data-toggle="tooltip" href="{{route('datapc.destroy', ['id' => $datakomputer->snidpc])}}" onclick="return confirm('Apakah PC akan dihapus')">
                                 <i class="material-icons">&#xE872;</i></a> --}}
-                                {{Form::model($datakomputer,['method' => 'delete','route' =>['datapc.destroy',$datakomputer->snid],'class'=>'form-inline'])}}
+                                {{Form::model($value,['method' => 'delete','route' =>['dataprinter.destroy',$value->snid],'class'=>'form-inline'])}}
 
-                                <a class="edit" title="Edit" data-toggle="tooltip" href="{{url('editdatapc/'.$datakomputer->snid)}}"> <i class="material-icons">&#xE254;</i></a>
+                                <a class="edit" title="Edit" data-toggle="tooltip" href="{{url('editdataprinter/'.$value->snid)}}"> <i class="material-icons">&#xE254;</i></a>
                                 {{-- <a class="delete" title="Delete" data-toggle="tooltip"  onclick="return confirm('Apakah PC akan dihapus')"> --}}
                                     <i class="material-icons">
                                         {!! Form::submit('&#xE872;', ['class'=>'btn btn-xs btn-ligth btn-sm','onclick'=>'return confirm("Jadi Hapus Data Ini");']) !!}
                                     </i>
                                 {{-- </a> --}}
     
-                                    {{Form::close()}}
+                                {{Form::close()}}
     
                         </td>
                     </tr>
@@ -48,7 +48,7 @@
                     @endforeach
                 </tbody>
             </table>
-            {{$datakomputers->links()}}
+            {{$dataprinters->links()}}
 
         </div>
     </div>

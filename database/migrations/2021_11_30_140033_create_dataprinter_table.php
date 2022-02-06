@@ -14,7 +14,7 @@ class CreateDataprinterTable extends Migration
     public function up()
     {
         Schema::create('dataprinter', function (Blueprint $table) {
-            $table->string('snid',65);
+            $table->string('snid',25)->primary();
             $table->string('merk',50);
             $table->string('model',50);
             $table->timestamps();

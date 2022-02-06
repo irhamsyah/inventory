@@ -9,65 +9,56 @@ use Illuminate\Http\Request;
 use App\Models\Datakomputer;
 use App\Models\Dataprinter;
 use App\Models\Datahpaompantas;
+use App\Models\Beritaacarakomputer;
+use App\Models\Beritaacaraprinter;
 
+/*Use script bellow for create PDF and Void Error :
+    Non-static method Barryvdh\DomPDF\PDF::loadView() should not be called statically
+*/
+use Barryvdh\DomPDF\Facade as PDF;
 class InventoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return \Illuminate\Http\Response
-     */
+    //To Show Form for input record/Data Compputer
     public function createkomputer()
     {
         return view('input');
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    //To Show Form for input record/Data PRINTER
     public function createprinter()
     {
-        //
         return view('inputprinter');
     }
+    //To Show Form for input record/Data HP AOM PANTAS
 
     public function createhpaompantas()
     {
         return view('inputhpaompantas');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    //To Save data PC which has inputed from FORM
     public function store(Request $request)
     {
         // dd($request);=> this method for show all data which submited by form
         //below, this method to validate your input
         $this->validate($request, [ 
-            'snidpc' => 'required|unique:datakomputer',
+            'snid' => 'required|unique:datakomputer',
             'modelpc' => 'required',
             'typepc'=>'required',
         ]);
         
-        if (!empty($request->snidpc)){
-            $data = $request->only('snidpc', 'modelpc','typepc');
+        if (!empty($request->snid)){
+            $data = $request->only('snid', 'modelpc','typepc');
         }
-
-        // Don't overcomplicate, just upload to public/img folder and log the file name
-        // In the future, maybe we would do some processing like resize or crop it.
 
         $datakomputer = Datakomputer::create($data);
 
             //To show flash message on input form ypu must specify variable to load message on form/blade/template such as 'message'   
-            session()->flash('message', 'Computer data which S/N : ' . $request->snidpc .' Saved');
+            session()->flash('message', 'Computer data which S/N : ' . $request->snid .' Saved');
             session()->flash('type', 'success');
             return redirect('/inputdatakomputer');
 
     }
+    //To Save data PRINTRE which has inputed from FORM
+
     public function storeprinter(Request $request)
     {
         // dd($request);
@@ -75,15 +66,12 @@ class InventoryController extends Controller
         $this->validate($request, [ 
             'snid' => 'required|unique:dataprinter',
             'model' => 'required',
-            'type'=>'required',
+            'merk'=>'required',
         ]);
         
         if (!empty($request->snid)){
-            $data = $request->only('snid','model','type');
+            $data = $request->only('snid','model','merk');
         }
-
-        // Don't overcomplicate, just upload to public/img folder and log the file name
-        // In the future, maybe we would do some processing like resize or crop it.
 
         $datakomputer = Dataprinter::create($data);
 
@@ -92,12 +80,7 @@ class InventoryController extends Controller
             session()->flash('type', 'success');
             return redirect('/forminputprinter');
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //To Save data HP AOM which has inputed from FORM
     public function storehpaompantas(Request $request)
     {
         // dd($request);
@@ -130,31 +113,131 @@ class InventoryController extends Controller
         return view('viewkomputer',['datakomputers'=>$datakomputers]);
     }
 
-    // Method to Show Record Of Database which found
+    // Method to Show Record Of Database DATAKOMPUTER which found
     public function editdatapc($id)
     {
         // dd($id);
         $hasil=Datakomputer::findOrFail($id);
         return view('frmeditdatapc',['hasil'=>$hasil]);
-
     }
-    // Method to SAVE data that UPDATED
+    // Method to SAVE data PC Which UPDATED
     public function updatedatakomputer(Request $request)
     {
-        $updatepc=Datakomputer::findOrFail($request->snidpc);
+        $updatepc=Datakomputer::findOrFail($request->snid);
         $this->validate($request, 
         [
-            'snidpc'=> 'required',
+            'snid'=> 'required',
             'modelpc'=>'required',
             'typepc' => 'required'
         ]);
         //this method uses to get data from Form Editing
-        $data = $request->only('snidpc','modelpc','typepc');
+        $data = $request->only('snid','modelpc','typepc');
         $updatepc->update($data);
 
-        session()->flash('message', 'Data Komputer dengan Serial Number : ' . $request->snidpc .' Berhasil di Update');
+        session()->flash('message', 'Data Komputer dengan Serial Number : ' . $request->snid .' Berhasil di Update');
         session()->flash('type', 'success');
         return redirect('/viewdatakomputer');
 
     }
+    // Method to DELETE record PC Data from database
+    public function pcdatadestroy($id)
+    {
+        $datapc = Datakomputer::find($id);
+        $hapusbarang = Datakomputer::where('snid','=', $id)->delete();
+        return redirect()->route('viewdatakomputer')->with('message',$datapc->snid .' Deleted');
+    }
+
+    //Method to Show ALL PRINTER Data on Form/Template
+    public function viewprinterrecord()
+    {
+        $dataprinters=Dataprinter::paginate(8);
+        return view('viewprinter',['dataprinters'=>$dataprinters]);
+    }
+
+    // Method to Show Record Of Database DATAPRINTER which found
+    public function editdataprinter($id)
+    {
+        $hasil=Dataprinter::findOrFail($id);
+        return view('frmeditdataprinter',['hasil'=>$hasil]);
+    }
+
+    // Method to SAVE PRINTER Data which UPDATED
+    public function updatedataprinter(Request $request)
+    {
+        // dd($request);
+        $updatepc=Dataprinter::findOrFail($request->snid);
+        $this->validate($request, 
+        [
+            'snid'=> 'required',
+            'model'=>'required',
+            'merk' => 'required'
+        ]);
+        //this method uses to get data from Form Editing
+        $data = $request->only('snid','model','merk');
+        $updatepc->update($data);
+
+        session()->flash('message', 'Data Printer dengan Serial Number : ' . $request->snid .' Berhasil di Update');
+        session()->flash('type', 'success');
+        return redirect('/viewdataprinter');
+
+    }
+    // Method to DELETE record PRINTER Data from database
+    public function printerdatadestroy($id)
+    {
+        // dd($id);
+        Dataprinter::find($id)->delete();
+        return redirect()->route('viewdataprinter')->with('message','Printer which Serial Number '.$id.' Deleted');
+    }
+    //Method to Show ALL HP AOM PANTAS Data on Form/Template
+    public function viewdatahpaomrecord()
+    {
+        $datahpaom=Datahpaompantas::paginate(8);
+        return view('viewhpaom',['datahpaoms'=>$datahpaom]);
+    }
+    // Function to SHOW FORM to borrow PC and create data for borrowing data laptop 
+    public function forminputpinjampclaptop()
+    {
+        $datakomputers=Datakomputer::paginate(8);
+        return view('formbakomputer',['datakomputers'=>$datakomputers]);
+    }
+    //Function to SAVE DATA FROM formbakomputer (Form BA Pinjam komputer/laptop)
+    public function simpanformbakomputer(Request $request)
+    {
+        // dd(date('Y-m-d',strtotime($request->tanggal)));
+        if(count($request->cek_pilih)>0)
+        {
+            foreach($request->cek_pilih as $value)
+            {
+                $hasil = Datakomputer::findOrFail($value);
+                if (!empty($value)){
+                    $data = $request->only('nama_pic','jabatan');
+                    // this method bellow to create date format : YYYY-MM-DD
+                    $data['tanggal']=date('Y-m-d',strtotime($request->tanggal));
+                    $data['snid']=$hasil->snid;
+                    $data['modelpc']=$hasil->modelpc;
+                    $data['merkpc']=$hasil->typepc;
+
+                    $datakomputer = Beritaacarakomputer::create($data);
+
+                }
+                
+            }
+                        //To show flash message on input form ypu must specify variable to load message on form/blade/template such as 'message'   
+                        session()->flash('message', 'BA Succesfully Writed with PIC : ' . $request->nama_pic);
+                        session()->flash('type', 'success');
+                        return redirect('/forminputpinjampclaptop');
+            
+        }
+
+    }
+
+
+
+    //Buat View Laporan BA Pinjam komputer
+    public function tesreport()
+    {
+        $data = Datakomputer::all();
+        return view('bapinjamkomputer',['data'=>$data]);
+    }
+
 }

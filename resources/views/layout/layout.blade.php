@@ -14,15 +14,25 @@
         />
         <!-- {{-- CSS STYLE --}} -->
         <link rel="stylesheet" href="css\style.css" />
-
-        <title>Menu Aplikasi Administrasi Inventaris</title>
+        {{-- DATEPICKER JQUERY --}}
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+        <script>
+        $( function() {
+        $( "#datepicker" ).datepicker();
+        } );
+        </script>
+        {{-- BATAS DATEPICKER --}}
+        <title>Aplikasi Administrasi Inventaris</title>
     </head>
     <body>
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container">
                     <a class="navbar-brand" href="#"
-                        >Aplikasi Admnistrasi Inventaris</a
+                        >Aplikasi Administrasi Inventaris</a
                     >
                     <button
                         class="navbar-toggler"
@@ -93,6 +103,17 @@
                                             >Input Data HP AOM</a
                                         >
                                     </li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{
+                                                route('forminputpinjampclaptop')
+                                            }}"
+                                            >Input Data Pinjam Komputer</a
+                                        >
+                                    </li>
+
                                 </ul>
                             </li>
                             {{-- Menu View melihat data --}}
@@ -105,7 +126,7 @@
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
                                 >
-                                    Menu View Data Inputan
+                                    Menu View Data Input
                                 </a>
                                 <ul
                                     class="dropdown-menu"
@@ -125,7 +146,7 @@
                                         <a
                                             class="dropdown-item"
                                             href="{{
-                                                route('forminputprinter')
+                                                route('viewdataprinter')
                                             }}"
                                             >View Data Printer</a
                                         >
@@ -135,7 +156,7 @@
                                         <a
                                             class="dropdown-item"
                                             href="{{
-                                                route('forminputhpaompantas')
+                                                route('viewdatahpaom')
                                             }}"
                                             >Viwe Data HP AOM</a
                                         >
