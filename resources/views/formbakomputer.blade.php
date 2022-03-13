@@ -15,15 +15,35 @@
         <span class="input-group-text" id="basic-addon1">Nama PIC</span>
         <input type="text" name="nama_pic" class="form-control" placeholder="Nama PIC Mekaar" aria-label="pic" aria-describedby="basic-addon1" value="{{old('nama_pic')}}">
       </div>
+      
       <div class="input-group mb-3 mt-3 w-50">
-
       <span class="input-group-text" id="basic-addon1">Tanggal</span>
       <input type="text" id="datepicker" name="tanggal" class="form-control" placeholder="Tanggal BA" aria-label="tanggal" aria-describedby="basic-addon1" value="{{old('tanggal')}}">
       </div>
+      {{-- Data Bentuk yang dipinjam --}}
+      <?php
+      $berupa = array("PC","Laptop");
+      ?>
+      <select class="form-select form-select-md mb-3 w-50" name="bentuk" aria-label=".form-select-lg example">
+        <option value="">-- Select PC/Laptop --</option>
+        {{-- below this is method for get old Value if happened error on validation, old value will be back not erased --}}
+        @foreach($berupa as $key=>$value)
+          @if (old('bentuk')==$value)
+              <option value="{{$value}}" selected>{{$value}}</option>
+          @else
+              <option value="{{$value}}" >{{$value}}</option>
+          @endif
+        @endforeach
+      </select>
+
+      <div class="input-group mb-3 mt-3 w-50">
+        <span class="input-group-text" id="basic-addon1">Keterangan</span>
+        <input type="text" name="keterangan" class="form-control" placeholder="Keterangan BA" aria-label="keterangan" aria-describedby="basic-addon1" value="{{old('keterangan')}}">
+      </div>
 
       <?php
-      $jabatans = array("Kepala Cabang","Senior Account Officer","Account Officer");
-  ?>
+      $jabatans = array("KRM SBY1","KRM SBY2","KRM SBY 1,2","Kepala Area","Kepala Cabang","Senior Account Officer","Account Officer");
+      ?>
 
       <select class="form-select form-select-md mb-3 w-50" name="jabatan" aria-label=".form-select-lg example">
         <option value="">-- Select Hierarky --</option>
@@ -37,8 +57,8 @@
         @endforeach
       </select>
 
-      <div class="input-group mb-3 w-50">
-        <span class="input-group-text" id="basic-addon1">Model</span>
+      {{-- <div class="input-group mb-3 w-50"> --}}
+        {{-- <span class="input-group-text" id="basic-addon1">Model</span> --}}
         {{-- Penampilan data Kommputer --}}
         <table class="table table-bordered">
           <thead>
@@ -68,7 +88,7 @@
           </tbody>
       </table>
       {{$datakomputers->links()}}
-      </div>
+      {{-- </div> --}}
 
 
       <div class="grid">

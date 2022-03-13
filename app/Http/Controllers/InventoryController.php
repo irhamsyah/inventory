@@ -200,7 +200,7 @@ class InventoryController extends Controller
         $datakomputers=Datakomputer::paginate(8);
         return view('formbakomputer',['datakomputers'=>$datakomputers]);
     }
-    //Function to SAVE DATA FROM formbakomputer (Form BA Pinjam komputer/laptop)
+    //Function to SAVE INPUT DATA FROM formbakomputer (Form BA Pinjam komputer/laptop)
     public function simpanformbakomputer(Request $request)
     {
         // dd(date('Y-m-d',strtotime($request->tanggal)));
@@ -210,34 +210,100 @@ class InventoryController extends Controller
             {
                 $hasil = Datakomputer::findOrFail($value);
                 if (!empty($value)){
-                    $data = $request->only('nama_pic','jabatan');
+                    $data = $request->only('nama_pic','jabatan','bentuk','keterangan');
                     // this method bellow to create date format : YYYY-MM-DD
                     $data['tanggal']=date('Y-m-d',strtotime($request->tanggal));
                     $data['snid']=$hasil->snid;
                     $data['modelpc']=$hasil->modelpc;
                     $data['merkpc']=$hasil->typepc;
-
+                    // $data['keterangan']=$hasil->keterangan;
                     $datakomputer = Beritaacarakomputer::create($data);
-
                 }
-                
             }
                         //To show flash message on input form ypu must specify variable to load message on form/blade/template such as 'message'   
                         session()->flash('message', 'BA Succesfully Writed with PIC : ' . $request->nama_pic);
                         session()->flash('type', 'success');
                         return redirect('/forminputpinjampclaptop');
-            
         }
 
     }
 
-
-
     //Buat View Laporan BA Pinjam komputer
+    public function viewdatabakomputer() 
+    {
+        $data = Beritaacarakomputer::all();
+        return view('pdf.bapinjamkomputer',['data'=>$data]);
+    }
+
+    public function editbapinjamkomputer(Request $request)
+    {
+        // dd($request);
+        /*Berikut Adala Cara MengeCEK apakah Parameter yang dikirim Adalah ARRAY
+        dengan Fungsi is_arry($paramter)
+        */
+        if(is_array($request->cek_pilih)){
+            if(count($request->cek_pilih)>0)
+            {
+                foreach($request->cek_pilih as $value)
+                {
+                    $hasil = Beritaacarakomputer::findOrFail($value);
+                    if(!empty($value))
+                    {
+                        return view('formupdatebakomputer',['hasil'=>$hasil]);
+                    }
+                }
+            }
+    
+        }
+        else{
+            //To show flash message on input form ypu must specify variable to load message on form/blade/template such as 'message'   
+            session()->flash('message', 'Belum Ada yang dipilih ');
+            session()->flash('type', 'danger');
+            return redirect('/viewdatabakomputer');
+        }
+    }
+
+    public function simpanupdatebakomputer(Request $request)
+    {
+        // dd($request);
+        $updatepc=Beritaacarakomputer::findOrFail($request->id);
+        $this->validate($request, 
+        [
+            'nama_pic'=> 'required',
+            'tanggal'=>'required',
+            'jabatan' => 'required'
+        ]);
+        //this method uses to get data from Form Editing
+        $data = $request->only('nama_pic','jabatan','keterangan');
+        $data['tanggal']=date('Y-m-d',strtotime($request->tanggal));
+        $updatepc->update($data);
+
+        session()->flash('message', 'Data BA Pinjam Komputer dengan Serial Number : ' . $request->snid .' Berhasil di Update');
+        session()->flash('type', 'success');
+        return redirect('/viewdatabakomputer');
+    }
+
+    public function cetakberitaacara($id)
+    {
+        $hasil = Beritaacarakomputer::find($id);
+        return view('pdf.cetakbapinjamkomputer',['hasil'=>$hasil]);
+    }
     public function tesreport()
     {
         $data = Datakomputer::all();
-        return view('bapinjamkomputer',['data'=>$data]);
+        return view('pdf.bapinjamkomputer',['data'=>$data]);
+        // $pdf = PDF::loadView('pdf.bapinjamkomputer',['data'=>$data]);
+        // return $pdf->stream();
+
+    }
+
+    public function createpdfbakomputer()
+    {
+        $data = Datakomputer::all();
+
+        $pdf = PDF::loadView('pdf.bapinjamkomputer',['data'=>$data]);
+        return $pdf->stream();
+
     }
 
 }

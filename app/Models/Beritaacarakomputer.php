@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Beritaacarakomputer extends Model
 {
     public $timestamps = true;
-    protected $fillable = ['nama_pic', 'jabatan','tanggal','snid','merkpc','modelpc'];
+    protected $fillable = ['nama_pic', 'jabatan','tanggal','keterangan','snid','merkpc','modelpc','bentuk'];
 }

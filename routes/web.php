@@ -161,8 +161,42 @@ Route::post('simpanformbakomputer',
     'uses'=>'InventoryController@simpanformbakomputer'
 ]);
 
-
 // Routing to view bapinjamkomputer -> it can be conver to pdf file
+Route::get('viewdatabakomputer', 
+[
+    'as'=>'viewdatabakomputer',
+    'uses'=>'InventoryController@viewdatabakomputer'
+]);
+// Routing to Show Form EDITING BA pinjam komputer
+Route::get('editbapinjamkomputer', 
+[
+    'as'=>'editbapinjamkomputer',
+    'uses'=>'InventoryController@editbapinjamkomputer'
+]);
+
+//ROuting to Save Updating Data from Form BA pinjam komputer
+Route::post('simpanupdatebakomputer',
+[
+    'as'=>'simpanupdatebakomputer',
+    'uses'=>'InventoryController@simpanupdatebakomputer'
+]);
+
+Route::get('cetakberitaacara/{id}',
+[
+    'as'=>'cetakberitaacara',
+    'uses'=>'InventoryController@cetakberitaacara'
+]);
+
+Route::get('cetakberitaacarakembali/{id}',function($id){
+    return $id;
+})->name('cetakberitaacarakembali');
+//TO SHOW TESTING TEMPLATE FOR CHECKED box
+Route::get('testcheckedbox',function()
+{
+    return view('testcheckedbox');
+});
+
+//TESTING TO SHOW REPORT WITH PDF FORMAT
 Route::get('tesreport',
 [
     'as'=>'tescreatepdffile',

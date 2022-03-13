@@ -6,14 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <!-- Bootstrap CSS -->
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-            crossorigin="anonymous"
-        />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <!-- {{-- CSS STYLE --}} -->
-        <link rel="stylesheet" href="css\style.css" />
+        <link rel="stylesheet" href="{{URL::asset('css/style.css')}}" />
         {{-- DATEPICKER JQUERY --}}
         <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
         <link rel="stylesheet" href="/resources/demos/style.css">
@@ -162,7 +157,34 @@
                                         >
                                     </li>
                                 </ul>
-                            </li>                        
+                            </li>      
+                            {{-- Menu Print Report --}}
+                            <li class="nav-item dropdown">
+                                <a
+                                    class="nav-link dropdown-toggle"
+                                    href="#"
+                                    id="navbarDropdown"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    Menu Report
+                                </a>
+                                <ul
+                                class="dropdown-menu"
+                                aria-labelledby="navbarDropdown"
+                                >
+                                <li>
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{
+                                            route('viewdatabakomputer')
+                                        }}"
+                                        >View BA Pinjam Komputer</a
+                                    >
+                                </li>
+                            </ul>
+                            </li>               
                         </ul>
                     </div>
                 </div>
