@@ -161,6 +161,9 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        // EXPORT TO EXCEL
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+
 
         /*
          * Package Service Providers...
@@ -235,6 +238,9 @@ return [
         // Facade for shorter code SNAPY PDF
         // 'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         // 'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+        // EXPORT TO EXXCE
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+
 
     ],
 

@@ -17,11 +17,17 @@ h2 {
     margin-left: 600px;
 }
 
+/* #ifYes {
+    width: 50%;
+} */
+
 #akhir {
     margin-bottom: 100px;
 }
 #ttd {
-    margin-bottom: 100px;
+    margin-bottom: 300px;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 14px;
 }
 #jabatan {
     margin-top: 10px;

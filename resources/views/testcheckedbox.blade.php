@@ -11,23 +11,32 @@
     color: blue;
   }
   </style>
-  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+  <script>
+    function yesnoCheck(that) {
+    if (that.value == "other") {
+  alert("check");
+        document.getElementById("ifYes").style.display = "block";
+    } else {
+        document.getElementById("ifYes").style.display = "none";
+    }
+}
+
+  </script>
 </head>
 <body>
  
-<input id="check1" type="checkbox" checked="checked">
-<label for="check1">Check me</label>
-<p></p>
- 
-<script>
-$( "input" ).change(function() {
-  var $input = $( this );
-  $( "p" ).html(
-    ".attr( \"checked\" ): <b>" + $input.attr( "checked" ) + "</b><br>" +
-    ".prop( \"checked\" ): <b>" + $input.prop( "checked" ) + "</b><br>" +
-    ".is( \":checked\" ): <b>" + $input.is( ":checked" ) + "</b>" );
-}).change();
-</script>
+  <select onchange="yesnoCheck(this);">
+    <option value="">Valitse automerkkisi</option>
+    <option value="lada">Lada</option>
+    <option value="mosse">Mosse</option>
+    <option value="volga">Volga</option>
+    <option value="vartburg">Vartburg</option>
+    <option value="other">Muu</option>
+</select>
+
+<div id="ifYes" style="display: none;">
+    <label for="car">Muu, mikä?</label> <input type="text" id="car" name="car" /><br />
+</div>
  
 </body>
 </html>

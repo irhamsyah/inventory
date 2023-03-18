@@ -2,20 +2,25 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use illuminate\Foundation\Validation\ValidatesRequests;
 use App\Models\Datakomputer;
 use App\Models\Dataprinter;
 use App\Models\Datahpaompantas;
 use App\Models\Beritaacarakomputer;
+Use App\Models\Log;
 use App\Models\Beritaacaraprinter;
 
 /*Use script bellow for create PDF and Void Error :
     Non-static method Barryvdh\DomPDF\PDF::loadView() should not be called statically
 */
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\PDF as DomPDFPDF;
+use Illuminate\Support\Facades\App;
+use Knp\Snappy\Pdf as SnappyPdf;
+
 class InventoryController extends Controller
 {
     //To Show Form for input record/Data Compputer
@@ -41,12 +46,14 @@ class InventoryController extends Controller
         //below, this method to validate your input
         $this->validate($request, [ 
             'snid' => 'required|unique:datakomputer',
+            'snidmonitor' => 'unique:datakomputer',
+            'bentuk' => 'required',
             'modelpc' => 'required',
             'typepc'=>'required',
         ]);
         
         if (!empty($request->snid)){
-            $data = $request->only('snid', 'modelpc','typepc');
+            $data = $request->only('snid','snidmonitor','bentuk', 'modelpc','typepc');
         }
 
         $datakomputer = Datakomputer::create($data);
@@ -195,22 +202,38 @@ class InventoryController extends Controller
         return view('viewhpaom',['datahpaoms'=>$datahpaom]);
     }
     // Function to SHOW FORM to borrow PC and create data for borrowing data laptop 
-    public function forminputpinjampclaptop()
+    public function forminputpinjampclaptop(Request $request)
     {
         $datakomputers=Datakomputer::paginate(8);
+        // $conditions = [];
+        // $conditions['nama_pic'] = $request->nama_pic;
+        // session(['formDataSession'=>$conditions]);
+        // $getSession = session('formDataSession');
+        // $conditions['nama_pic']=$getSession['nama_pic'];
         return view('formbakomputer',['datakomputers'=>$datakomputers]);
     }
     //Function to SAVE INPUT DATA FROM formbakomputer (Form BA Pinjam komputer/laptop)
     public function simpanformbakomputer(Request $request)
     {
         // dd(date('Y-m-d',strtotime($request->tanggal)));
+        // dd($request);
+        $this->validate($request, [ 
+            'nama_pic' => 'required|unique:beritaacarakomputers',
+            'jabatan' => 'required',
+            'bentuk'=>'required',
+            'cabang'=>'nullable',
+            'keterangan' => 'nullable',
+        ]);
+
+        if(is_array($request->cek_pilih)){
+
         if(count($request->cek_pilih)>0)
         {
             foreach($request->cek_pilih as $value)
             {
                 $hasil = Datakomputer::findOrFail($value);
                 if (!empty($value)){
-                    $data = $request->only('nama_pic','jabatan','bentuk','keterangan');
+                    $data = $request->only('nama_pic','jabatan','bentuk','cabang','keterangan');
                     // this method bellow to create date format : YYYY-MM-DD
                     $data['tanggal']=date('Y-m-d',strtotime($request->tanggal));
                     $data['snid']=$hasil->snid;
@@ -220,12 +243,18 @@ class InventoryController extends Controller
                     $datakomputer = Beritaacarakomputer::create($data);
                 }
             }
-                        //To show flash message on input form ypu must specify variable to load message on form/blade/template such as 'message'   
-                        session()->flash('message', 'BA Succesfully Writed with PIC : ' . $request->nama_pic);
-                        session()->flash('type', 'success');
-                        return redirect('/forminputpinjampclaptop');
+                //To show flash message on input form ypu must specify variable to load message on form/blade/template such as 'message'   
+                session()->flash('message', 'BA Succesfully Writed with PIC : ' . $request->nama_pic);
+                session()->flash('type', 'success');
+                return redirect('/forminputpinjampclaptop');
         }
-
+        } else 
+        {
+                session()->flash('message', 'Belum Ada PC/Laptop yang dipilih ');
+                session()->flash('type', 'danger');
+                // Fungsi back() ini digunakan untuk kembali ke Halaman/Form Inputan dengan Data-Data yang di INPUT SEBELUMNYA :)
+                return back()->withInput();
+        }
     }
 
     //Buat View Laporan BA Pinjam komputer
@@ -238,7 +267,8 @@ class InventoryController extends Controller
     public function editbapinjamkomputer(Request $request)
     {
         // dd($request);
-        /*Berikut Adala Cara MengeCEK apakah Parameter yang dikirim Adalah ARRAY
+        /* 
+        Berikut Adala Cara MengeCEK apakah Parameter yang dikirim Adalah ARRAY
         dengan Fungsi is_arry($paramter)
         */
         if(is_array($request->cek_pilih)){
@@ -259,7 +289,8 @@ class InventoryController extends Controller
             //To show flash message on input form ypu must specify variable to load message on form/blade/template such as 'message'   
             session()->flash('message', 'Belum Ada yang dipilih ');
             session()->flash('type', 'danger');
-            return redirect('/viewdatabakomputer');
+            // Fungsi back() ini digunakan untuk kembali ke Halaman/Form Inputan dengan Data-Data yang di INPUT SEBELUMNYA :)
+            return back()->withInput();
         }
     }
 
@@ -283,18 +314,75 @@ class InventoryController extends Controller
         return redirect('/viewdatabakomputer');
     }
 
-    public function cetakberitaacara($id)
+    public function cetakberitaacarapinjampc($id)
     {
         $hasil = Beritaacarakomputer::find($id);
-        return view('pdf.cetakbapinjamkomputer',['hasil'=>$hasil]);
+        $pdf = PDF::loadview('pdf.cetakpinjamkomputer',['hasil'=>$hasil])->setOptions(['defaultFont'=>'helvetica']);
+        return $pdf->stream();
     }
-    public function tesreport()
+    //Fungsi Untuk cetak berita acara pengembalian
+    public function cetakberitaacarakembali($id)
     {
-        $data = Datakomputer::all();
-        return view('pdf.bapinjamkomputer',['data'=>$data]);
-        // $pdf = PDF::loadView('pdf.bapinjamkomputer',['data'=>$data]);
+        $hasil = Beritaacarakomputer::find($id);
+        $data = $hasil->only('nama_pic','jabatan','snid','merkpc','modelpc','tanggal','bentuk','cabang','keterangan',);
+
+        $hasildata=Log::create($data);
+        $hasil->delete();
+        return view('pdf.cetakbapengembalianpc',['hasil'=>$hasil]);
+
+        // dd($hasil['nama_pic']);
+        // $pdf = PDF::loadview('pdf.cetakbapengembalianpc',['hasil'=>$hasil])->setOptions(['defaultFont'=>'helvetica']);
         // return $pdf->stream();
 
+    }
+
+    // public function cetakbapinjamkomputer($id)
+    // {
+        // return $id;
+        // $hasil = Beritaacarakomputer::find($id);
+
+        // $pdf = PDF::loadview('pdf.cetakbapinjamkomputer',['hasil'=>$hasil]);
+        // return $pdf->download('tes.pdf');    
+    // }
+
+    //Function for view hhistory of borrowing of PC or Laptop
+    public function viewlogbakomputerkembali()
+    {
+        
+        $datapc = Log::paginate(10);
+        return view('viewhistorybapinjampc',['datapc'=>$datapc]);
+    }
+
+    public function historycetakberitaacarapinjampc($id)
+    {
+                // return $id;
+        $hasil = log::find($id);
+
+        $pdf = PDF::loadview('pdf.cetakbapinjamkomputer',['hasil'=>$hasil]);
+        return $pdf->download('tes.pdf');    
+
+    }
+    //Function for view form serahterima pc/laptop Mekaar
+    public function formbaserahterimapc()
+    {
+        $datakomputers = Datakomputer::all();
+        return view('formbaserahterimapc',['datakomputers'=>$datakomputers]);
+    }
+
+    public function simpanformbaserahterimapc(Request $request)
+    {
+        dd($request);
+    }
+    // TES REPORT BUat PDF
+    public function tesreport()
+    {
+        // $data = Datakomputer::all();
+        // return view('pdf.bapinjamkomputer',['data'=>$data]);
+        // $pdf = PDF::loadView('pdf.bapinjamkomputer',['data'=>$data]);
+        // return $pdf->stream();
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML('<h1>Test</h1>');
+        return $pdf->stream();
     }
 
     public function createpdfbakomputer()
